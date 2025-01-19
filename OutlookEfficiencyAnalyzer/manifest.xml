@@ -1,0 +1,26 @@
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MessageRead">
+  <Id>12345678-90ab-cdef-1234-567890abcdef</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Jouw Naam</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName>Efficiency Analyzer</DisplayName>
+  <Description>Analyzes email efficiency and cost</Description>
+  <IconUrl DefaultValue="https://example.com/icon.png" />
+  <SupportUrl DefaultValue="https://example.com/support" />
+  <Hosts>
+    <Host Name="Outlook" />
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="Mailbox" />
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://example.com/taskpane.html" />
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+</OfficeApp>

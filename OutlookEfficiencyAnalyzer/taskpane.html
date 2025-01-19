@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Efficiency Analyzer</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script>
+    Office.onReady((info) => {
+      if (info.host === Office.HostType.Outlook) {
+        document.getElementById('analyze').addEventListener('click', analyzeEmail);
+      }
+    });
+
+    async function analyzeEmail() {
+      const item = Office.context.mailbox.item;
+      const body = await getBody();
+      const ccRecipients = item.cc.length;
+
+      const wordCount = body.split(/\s+/).length;
+      const readTime = (wordCount * 0.32 / 60).toFixed(2);
+      const efficiency = calculateEfficiency(wordCount);
+
+      document.getElementById('results').innerHTML = `
+        <p>Reading Time: ${readTime} minutes</p>
+        <p>Efficiency Score: ${efficiency}%</p>
+        <p>CC Cost: €${(ccRecipients * 0.78 * readTime).toFixed(2)}</p>
+      `;
+    }
+
+    function calculateEfficiency(wordCount) {
+      const thresholds = [
+        { limit: 200, efficiency: 1 },
+        { limit: 300, efficiency: 0.8 },
+        { limit: 450, efficiency: 0.6 },
+        { limit: 500, efficiency: 0.4 },
+        { limit: 750, efficiency: 0.2 },
+        { limit: Infinity, efficiency: 0.05 },
+      ];
+      const threshold = thresholds.find(t => wordCount <= t.limit);
+      return Math.min(threshold.efficiency * 100, 100);
+    }
+
+    async function getBody() {
+      return new Promise((resolve, reject) => {
+        Office.context.mailbox.item.body.getAsync("text", (result) => {
+          if (result.status === Office.AsyncResultStatus.Succeeded) {
+            resolve(result.value);
+          } else {
+            reject(result.error);
+          }
+        });
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Efficiency Analyzer</h1>
+  <button id="analyze">Analyze Email</button>
+  <div id="results"></div>
+</body>
+</html>
